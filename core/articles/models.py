@@ -35,11 +35,11 @@ class Article(models.Model):
     excerpt = models.TextField(max_length=500, blank=True)
     content = CKEditor5Field(config_name='default')
     featured_image = ResizedImageField(
-        size=[1900, 1000],                  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],        # کراپ از کجا انجام بشه (اختیاری)
-        quality=75,                       # کیفیت (0 تا 100)
-        upload_to='article_images/',            # مسیر ذخیره‌سازی
-        force_format='WEBP',               # تبدیل فرمت (jpg, png, webp و غیره)
+        size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
+        crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
+        quality=75,  # کیفیت (0 تا 100)
+        upload_to='article_images/',  # مسیر ذخیره‌سازی
+        force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)
         blank=True, null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
@@ -61,4 +61,65 @@ class Article(models.Model):
             self.slug = slugify(self.title, allow_unicode=True)
         super().save(*args, **kwargs)
 
+
+class CourseInfo(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+    description = models.TextField()
+    base_image = ResizedImageField(
+        size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
+        crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
+        quality=75,  # کیفیت (0 تا 100)
+        upload_to='course/base_images',  # مسیر ذخیره‌سازی
+        force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)
+        blank=True, null=True
+    )
+    teachers = models.CharField(max_length=300, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    duration = models.PositiveIntegerField(help_text="مدت زمان دوره به ساعت", null=True, blank=True)
+
+    price = models.DecimalField(max_digits=11, decimal_places=2)
+    discount = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True)
+
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        verbose_name = "دروه"
+        verbose_name_plural = "دوره های آموزشی"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def final_price(self):
+        if self.price is None:
+            return None
+        if self.discount:
+            return self.price - self.discount
+        return self.price
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+
+class CourseImage(models.Model):
+    caption = models.CharField(max_length=300, blank=True, null=True)
+    image = models.ImageField(upload_to='course/course_images/')
+    course = models.ForeignKey(CourseInfo, on_delete=models.CASCADE, related_name='images')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.caption
+
+    class Meta:
+        verbose_name = "تصویر"
+        verbose_name_plural = "تصاویر دوره ها"
+        ordering = ['-created_at']
 
