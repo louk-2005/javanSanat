@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # app
     'accounts.apps.AccountsConfig',
     'articles.apps.ArticlesConfig',
+    'siteAssets.apps.SiteassetsConfig'
 
 ]
 
