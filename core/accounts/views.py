@@ -4,12 +4,15 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import action as Action
 # your files
-from .models import User
+from .models import User, ContactInfo, SocialLink
 from .serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
-    UserUpdateSerializer
+    UserUpdateSerializer,
+    ContactInfoSerializer,
+    SocialLinkSerializer
 )
 
 
@@ -46,4 +49,22 @@ class UserViewSet(viewsets.ViewSet):
         users = User.objects.all()
         serializer = UserProfileSerializer(users, many=True)
         return Response(serializer.data)
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = ContactInfo.objects.all()
+    serializer_class = ContactInfoSerializer
+
+    @Action(detail=True, methods=['get'])
+    def get_social_links(self, request, pk=None):
+        contact = self.get_object()
+        social_links = SocialLink.objects.filter(contact=contact)
+        serializer = SocialLinkSerializer(social_links, many=True)
+        return Response(serializer.data)
+
+class SocialLinkViewSet(viewsets.ModelViewSet):
+    queryset = SocialLink.objects.all()
+    serializer_class = SocialLinkSerializer
+
+
 

@@ -4,6 +4,7 @@ from django.utils.html import format_html,mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.db.models import Count
+from django.contrib import messages
 
 # your files
 from .models import Category, Article,CourseInfo, CourseImage, VideoCast, IndustrialTourism, IndustrialTourismImages
@@ -29,13 +30,14 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'get_thumbnail', 'author', 'category', 'created_at', 'is_updated')
+    list_display = ('title', 'get_thumbnail', 'author', 'category', 'created_at', 'is_updated', 'show')
     search_fields = ('title', 'excerpt', 'content')
     list_filter = ('category', 'author', 'created_at')
     prepopulated_fields = {'slug': ('title',)}
     list_per_page = 15
     date_hierarchy = 'created_at'
     readonly_fields = ('created_at', 'updated_at', 'get_full_image')
+    actions = ['make_show_true']  # اضافه کردن action سفارشی
 
     fieldsets = (
         (None, {
@@ -49,7 +51,7 @@ class ArticleAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         ('اطلاعات', {
-            'fields': ('author', 'category', 'created_at', 'updated_at'),
+            'fields': ('author', 'category', 'show', 'created_at', 'updated_at'),
             'classes': ('collapse',)
         }),
     )
@@ -80,11 +82,20 @@ class ArticleAdmin(admin.ModelAdmin):
     is_updated.boolean = True
     is_updated.short_description = 'به‌روزرسانی شده؟'
 
+    def make_show_true(self, request, queryset):
+        # تغییر وضعیت show برای تمام مقالات انتخاب شده به True
+        updated_count = queryset.update(show=True)
+        # نمایش پیام موفقیت
+        self.message_user(
+            request,
+            f"تعداد {updated_count} مقاله با موفقیت نمایش داده شدند.",
+            messages.SUCCESS
+        )
+
+    make_show_true.short_description = "نمایش مقالات انتخاب شده"  # متن نمایش داده شده در منوی actions
+
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('author', 'category')
-
-
-
 
 # Inline برای مدیریت تصاویر دوره
 class CourseImageInline(admin.TabularInline):

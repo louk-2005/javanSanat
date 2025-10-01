@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.contrib.auth.password_validation import validate_password
 
 # your files
-from .models import User
+from .models import User, ContactInfo, SocialLink
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -98,3 +98,18 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=value).exclude(pk=user.pk).exists():
             raise serializers.ValidationError("این ایمیل قبلاً استفاده شده است.")
         return value
+
+
+
+
+
+class ContactInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactInfo
+        fields = '__all__'
+
+
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialLink
+        fields = '__all__'

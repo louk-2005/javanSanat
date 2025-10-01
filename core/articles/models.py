@@ -11,10 +11,10 @@ from accounts.models import User
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True,verbose_name="نام")
-    slug = models.SlugField(max_length=100, unique=True, allow_unicode=True,verbose_name="اسلاگ")
-    description = models.TextField(blank=True,verbose_name="توضیحات")
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="تاریخ ایجاد")
+    name = models.CharField(max_length=100, unique=True, verbose_name="نام")
+    slug = models.SlugField(max_length=100, unique=True, allow_unicode=True, verbose_name="اسلاگ")
+    description = models.TextField(blank=True, verbose_name="توضیحات")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
 
     class Meta:
         verbose_name = "دسته‌بندی"
@@ -31,10 +31,10 @@ class Category(models.Model):
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=200,verbose_name="عنوان")
-    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True,verbose_name="اسلاگ")
-    excerpt = models.TextField(max_length=500, blank=True,verbose_name="خلاصه")
-    content = CKEditor5Field(config_name='default',verbose_name="محتوا")
+    title = models.CharField(max_length=200, verbose_name="عنوان")
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True, verbose_name="اسلاگ")
+    excerpt = models.TextField(max_length=500, blank=True, verbose_name="خلاصه")
+    content = CKEditor5Field(config_name='default', verbose_name="محتوا")
     featured_image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
         crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
@@ -44,11 +44,13 @@ class Article(models.Model):
         blank=True, null=True,
         verbose_name="تصویر اصلی"
     )
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="تاریخ ایجاد")
-    updated_at = models.DateTimeField(auto_now=True,verbose_name="تاریخ بروزرسانی")
+    show = models.BooleanField(default=False)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles',verbose_name="نویسنده")
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='articles',verbose_name="دسته بندی")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ بروزرسانی")
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles', verbose_name="نویسنده")
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='articles', verbose_name="دسته بندی")
 
     class Meta:
         verbose_name = "مقاله"
@@ -78,17 +80,19 @@ class CourseInfo(models.Model):
         blank=True, null=True,
         verbose_name="تصویر اصلی"
     )
-    teachers = models.CharField(max_length=300, blank=True, null=True,verbose_name="نام اساتید")
-    start_date = models.DateField(blank=True, null=True,verbose_name="تاریخ شروغ")
-    end_date = models.DateField(blank=True, null=True,verbose_name="تاریخ پایان")
-    duration = models.PositiveIntegerField(help_text="مدت زمان دوره به ساعت", null=True, blank=True,verbose_name="مدت زمان")
+    teachers = models.CharField(max_length=300, blank=True, null=True, verbose_name="نام اساتید")
+    start_date = models.DateField(blank=True, null=True, verbose_name="تاریخ شروغ")
+    end_date = models.DateField(blank=True, null=True, verbose_name="تاریخ پایان")
+    duration = models.PositiveIntegerField(help_text="مدت زمان دوره به ساعت", null=True, blank=True,
+                                           verbose_name="مدت زمان")
 
-    price = models.DecimalField(max_digits=11, decimal_places=2,verbose_name="قیمت")
-    discount = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True,verbose_name="تخفیف")
+    price = models.DecimalField(max_digits=11, decimal_places=2, verbose_name="قیمت")
+    discount = models.DecimalField(max_digits=11, decimal_places=2, null=True, blank=True, verbose_name="تخفیف")
 
-    is_published = models.BooleanField(default=False,verbose_name="منتشر شود")
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name="تاریخ ایجاد")
-    updated_at = models.DateTimeField(auto_now=True,verbose_name="تاریخ بروزرسانی")
+    is_published = models.BooleanField(default=False, verbose_name="منتشر شود")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ بروزرسانی")
+
     class Meta:
         verbose_name = "دروه"
         verbose_name_plural = "دوره های آموزشی"
@@ -120,7 +124,7 @@ class CourseImage(models.Model):
     )
 
     image = ResizedImageField(
-        size=[1900, 1000],   # سایز خروجی (عرض × ارتفاع)
+        size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
         crop=['middle', 'center'],  # کراپ از کجا انجام بشه
         quality=75,  # کیفیت (0 تا 100)
         upload_to='course/course_images/',  # مسیر ذخیره‌سازی
@@ -152,14 +156,6 @@ class CourseImage(models.Model):
         verbose_name = "تصویر"
         verbose_name_plural = "تصاویر دوره‌ها"
         ordering = ['-created_at']
-
-
-
-
-
-
-
-
 
 
 class VideoCast(models.Model):
@@ -231,7 +227,6 @@ class VideoCast(models.Model):
         """لینک embeddable برای iframe آپارات"""
         return f"https://www.aparat.com/video/video/embed/videohash/{self.aparat_id}/vt/frame"
 
-
     @property
     def thumbnail_url(self):
         """
@@ -240,9 +235,6 @@ class VideoCast(models.Model):
         اینجا فقط یک placeholder می‌ذاریم.
         """
         return f"https://aparat.com/static/thumbs/{self.aparat_id}.jpg"
-
-
-
 
 
 class IndustrialTourism(models.Model):
@@ -291,7 +283,6 @@ class IndustrialTourism(models.Model):
         return self.title
 
 
-
 class IndustrialTourismImages(models.Model):
     caption = models.CharField(
         max_length=300,
@@ -301,7 +292,7 @@ class IndustrialTourismImages(models.Model):
     )
 
     image = ResizedImageField(
-        size=[1900, 1000],   # سایز خروجی (عرض × ارتفاع)
+        size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
         crop=['middle', 'center'],  # کراپ از کجا انجام بشه
         quality=75,  # کیفیت (0 تا 100)
         upload_to='IndustrialTourism/images',  # مسیر ذخیره‌سازی
@@ -333,9 +324,3 @@ class IndustrialTourismImages(models.Model):
         verbose_name = "تصویر"
         verbose_name_plural = "تصاویر گردشگری صنعتی"
         ordering = ['-created_at']
-
-
-
-
-
-

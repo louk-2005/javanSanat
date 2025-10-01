@@ -9,7 +9,6 @@ class HomeImage(models.Model):
     description = models.TextField(blank=True,verbose_name="توضیحات")
     image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
         quality=75,  # کیفیت (0 تا 100)
         upload_to='article_images/',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)

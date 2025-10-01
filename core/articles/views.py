@@ -51,6 +51,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('show',)
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
