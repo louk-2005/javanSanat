@@ -37,7 +37,6 @@ class Article(models.Model):
     content = CKEditor5Field(config_name='default', verbose_name="محتوا")
     featured_image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
         quality=75,  # کیفیت (0 تا 100)
         upload_to='article_images/',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)
@@ -73,7 +72,6 @@ class CourseInfo(models.Model):
     description = models.TextField(verbose_name="توضیحات")
     base_image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],  # کراپ از کجا انجام بشه (اختیاری)
         quality=75,  # کیفیت (0 تا 100)
         upload_to='course/base_images',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)
@@ -125,7 +123,6 @@ class CourseImage(models.Model):
 
     image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],  # کراپ از کجا انجام بشه
         quality=75,  # کیفیت (0 تا 100)
         upload_to='course/course_images/',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)
@@ -245,7 +242,6 @@ class IndustrialTourism(models.Model):
 
     base_image = ResizedImageField(
         size=[1900, 1000],
-        crop=['middle', 'center'],
         quality=75,
         upload_to='IndustrialTourism/base_images',
         force_format='WEBP',
@@ -293,7 +289,6 @@ class IndustrialTourismImages(models.Model):
 
     image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
-        crop=['middle', 'center'],  # کراپ از کجا انجام بشه
         quality=75,  # کیفیت (0 تا 100)
         upload_to='IndustrialTourism/images',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)

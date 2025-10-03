@@ -8,7 +8,7 @@ class HomeImage(models.Model):
     name = models.CharField(max_length=100, unique=True,verbose_name="نام")
     description = models.TextField(blank=True,verbose_name="توضیحات")
     image = ResizedImageField(
-        size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
+        size=[500, 500],  # سایز خروجی (عرض × ارتفاع)
         quality=75,  # کیفیت (0 تا 100)
         upload_to='article_images/',  # مسیر ذخیره‌سازی
         force_format='WEBP',  # تبدیل فرمت (jpg, png, webp و غیره)

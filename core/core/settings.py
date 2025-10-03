@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     # app
     'accounts.apps.AccountsConfig',
     'articles.apps.ArticlesConfig',
-    'siteAssets.apps.SiteassetsConfig'
+    'siteAssets.apps.SiteassetsConfig',
+    'contactUs.apps.ContactusConfig',
 
 ]
 
@@ -158,7 +159,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),  # default 5 min
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # default 5 min
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # default 1 day
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
