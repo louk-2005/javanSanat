@@ -69,7 +69,7 @@ class CourseInfo(models.Model):
     title = models.CharField(max_length=200, verbose_name="عنوان"
                                                           "")
     slug = models.SlugField(max_length=200, unique=True, allow_unicode=True, verbose_name="اسلاگ")
-    description = models.TextField(verbose_name="توضیحات")
+    description = CKEditor5Field(config_name='default', verbose_name="توضیحات")
     base_image = ResizedImageField(
         size=[1900, 1000],  # سایز خروجی (عرض × ارتفاع)
         quality=75,  # کیفیت (0 تا 100)
@@ -81,7 +81,7 @@ class CourseInfo(models.Model):
     teachers = models.CharField(max_length=300, blank=True, null=True, verbose_name="نام اساتید")
     start_date = models.DateField(blank=True, null=True, verbose_name="تاریخ شروغ")
     end_date = models.DateField(blank=True, null=True, verbose_name="تاریخ پایان")
-    duration = models.PositiveIntegerField(help_text="مدت زمان دوره به ساعت", null=True, blank=True,
+    duration = models.PositiveIntegerField(help_text="مدت زمان دوره به دقیقه", null=True, blank=True,
                                            verbose_name="مدت زمان")
 
     price = models.DecimalField(max_digits=11, decimal_places=2, verbose_name="قیمت")
